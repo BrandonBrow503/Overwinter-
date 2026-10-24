@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overwinter — indoor plant care for gardeners</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<style>
+  :root{
+    --bg:#f5f1e8; --card:#fffdf8; --ink:#2f2a22; --muted:#6f6656;
+    --green:#3f6b3a; --green-d:#2e5029; --green-l:#e3ecd9; --leaf:#7ea25f;
+    --soil:#8a6a4b; --soil-l:#efe5d7; --warn:#b5562b; --warn-l:#fbe7dc;
+    --line:#e2d9c8; --radius:14px; --shadow:0 1px 3px rgba(60,45,20,.08),0 4px 14px rgba(60,45,20,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45;font-size:16px}
+  header{background:linear-gradient(135deg,var(--green-d),var(--green));color:#fff;padding:18px 16px 0}
+  .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+  header .wrap{padding:0}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand h1{margin:0;font-size:1.6rem;letter-spacing:.3px}
+  .brand p{margin:0;opacity:.85;font-size:.92rem}
+  .logo{font-size:2rem}
+  nav{display:flex;gap:4px;margin-top:14px}
+  nav button{flex:0 0 auto;background:transparent;border:0;color:#fff;opacity:.8;padding:10px 16px;font-size:1rem;font-weight:600;border-radius:12px 12px 0 0;cursor:pointer}
+  nav button[aria-selected="true"]{background:var(--bg);color:var(--green-d);opacity:1}
+  nav button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+  main{padding:20px 0 40px}
+  h2{font-size:1.3rem;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;background:var(--green);color:#fff;padding:9px 14px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.1}
+  .btn:hover{background:var(--green-d)}
+  .btn.secondary{background:var(--card);color:var(--green-d);border-color:var(--line)}
+  .btn.secondary:hover{background:var(--green-l)}
+  .btn.ghost{background:transparent;color:var(--muted);border-color:transparent;padding:7px 9px;font-weight:500}
+  .btn.ghost:hover{background:var(--soil-l);color:var(--ink)}
+  .btn.danger{background:transparent;color:var(--warn);border-color:var(--warn-l)}
+  .btn.danger:hover{background:var(--warn-l)}
+  .btn.water{background:#2f6f8f}
+  .btn.water:hover{background:#245a74}
+  .btn.small{padding:6px 10px;font-size:.85rem}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .spread{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+  .due{margin-bottom:20px;border-left:6px solid var(--leaf)}
+  .due.has{border-left-color:var(--warn);background:#fffaf4}
+  .due h3{margin:0 0 8px;font-size:1.05rem}
+  .due ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .due li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+  .tag{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--green-l);color:var(--green-d);text-transform:uppercase;letter-spacing:.4px}
+  .tag.over{background:var(--warn-l);color:var(--warn)}
+  .tag.today{background:#dcecf3;color:#245a74}
+  .tag.soil{background:var(--soil-l);color:var(--soil)}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .plant h3{margin:0;font-size:1.15rem}
+  .plant .type{color:var(--muted);font-size:.9rem}
+  .emoji{font-size:1.7rem;line-height:1}
+  .section{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+  .section h4{margin:0 0 6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.6px;color:var(--soil)}
+  .big{font-size:1.05rem;font-weight:700}
+  .muted{color:var(--muted);font-size:.88rem}
+  .hist{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .hist span{font-size:.78rem;background:#edf3f6;color:#245a74;border-radius:6px;padding:2px 7px}
+  .tips{margin:0;padding-left:18px;font-size:.92rem}
+  .tips li{margin:3px 0}
+  details summary{cursor:pointer;color:var(--green-d);font-weight:600;font-size:.92rem}
+  .notes{font-size:.9rem;background:var(--soil-l);border-radius:8px;padding:8px 10px;margin-top:10px;white-space:pre-wrap}
+  .disclaimer{font-size:.8rem;color:var(--muted);margin-top:22px;text-align:center}
+  /* Forms / modal */
+  .overlay{position:fixed;inset:0;background:rgba(35,30,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto;z-index:50}
+  .overlay[hidden]{display:none}
+  .modal{background:var(--card);border-radius:18px;max-width:640px;width:100%;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+  .modal h2{margin-bottom:6px}
+  label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+  input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--leaf);border-color:var(--leaf)}
+  textarea{min-height:64px;resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
+  .pick{display:flex;flex-direction:column;justify-content:flex-start;border:2px solid var(--line);background:#fff;border-radius:12px;padding:12px 10px;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
+  .pick:hover{border-color:var(--leaf)}
+  .pick[aria-pressed="true"]{border-color:var(--green);background:var(--green-l)}
+  .pick .emoji{display:block;margin-bottom:4px}
+  .pick b{display:block;font-size:.95rem}
+  .pick small{color:var(--muted)}
+  .ob-plant{border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;background:#fffefb}
+  .ob-plant h3{margin:0;font-size:1rem}
+  .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+  .hint{font-size:.82rem;color:var(--muted);margin-top:4px}
+  .empty{text-align:center;padding:30px}
+  /* Equipment */
+  .equip{display:flex;flex-direction:column}
+  .equip .icon{font-size:2.2rem;width:58px;height:58px;display:flex;align-items:center;justify-content:center;background:var(--green-l);border-radius:14px;margin-bottom:10px}
+  .equip h3{margin:0 0 6px}
+  .equip p{margin:0 0 10px;font-size:.93rem}
+  .equip ul{margin:0 0 14px;padding-left:18px;font-size:.88rem;color:var(--muted)}
+  .disclosure{font-size:.85rem;background:var(--soil-l);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 18px;color:var(--ink)}
+  .equip .row h3{margin:0}
+  .equip .icon{margin-bottom:0;flex:0 0 auto}
+  .products{display:grid;gap:10px}
+  .product{display:flex;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;transition:border-color .15s,background .15s}
+  .product.on{border-color:var(--green);background:var(--green-l)}
+  .pemoji{font-size:1.5rem;line-height:1.2}
+  .pbody{flex:1;min-width:0}
+  .pbody b{font-size:.95rem}
+  .pctl{margin-top:8px;gap:10px}
+  .toggle{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:.88rem;cursor:pointer;color:var(--green-d)}
+  .toggle input{width:18px;height:18px;accent-color:var(--green);margin:0}
+  .qty{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:.85rem;font-weight:500;color:var(--muted)}
+  .qty select{width:auto;padding:4px 8px;font-size:.88rem}
+  #equipList{grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
+  .usa{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:999px;background:#e6eef8;color:#1f3f6e;border:1px solid #c9d8ec;vertical-align:2px;white-space:nowrap}
+  .notusa{display:inline-block;font-size:.7rem;font-weight:600;padding:1px 7px;border-radius:999px;background:#f1ece3;color:var(--muted);border:1px solid var(--line);vertical-align:2px;white-space:nowrap}
+  .origin-note{font-size:.82rem;color:var(--soil);background:var(--soil-l);border-radius:8px;padding:6px 10px;margin:0 0 10px}
+  .cartbar{position:sticky;bottom:12px;margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:2px solid var(--green);border-radius:14px;padding:12px 14px;box-shadow:0 6px 24px rgba(40,60,30,.18);z-index:20}
+  .cartbar.empty{border-color:var(--line);box-shadow:var(--shadow)}
+  .btn[disabled]{background:#b9b2a3;color:#fff;cursor:not-allowed}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:.92rem;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:1}
+  footer{font-size:.8rem;color:var(--muted);text-align:center;padding:0 16px 30px}
+  footer button{font-size:.8rem}
+  /* ---- journal look ---- */
+  :root{--serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Noto Serif",serif}
+  h1,h2,h3,.cover-name,.sheet-title{font-family:var(--serif);letter-spacing:.2px}
+  h2{font-size:1.45rem}
+  .plant{padding:0;overflow:hidden;border-radius:20px;border:0;box-shadow:0 2px 6px rgba(60,45,20,.07),0 12px 30px rgba(60,45,20,.10)}
+  .plant .pbody2{padding:12px 16px 16px}
+  .cover{position:relative;display:block;width:100%;aspect-ratio:4/3;border:0;padding:0;margin:0;cursor:pointer;overflow:hidden;
+    background:linear-gradient(160deg,#e9e0cf,#d9cdb5 55%,#c9b99b);color:inherit;font:inherit;text-align:left}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+  .cover:hover img{transform:scale(1.03)}
+  .cover-emoji{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);font-size:4.2rem;filter:drop-shadow(0 4px 8px rgba(60,40,20,.2))}
+  .cover-hint{position:absolute;left:50%;top:64%;transform:translateX(-50%);white-space:nowrap;font-size:.85rem;font-weight:600;color:var(--soil);background:rgba(255,253,248,.85);padding:5px 12px;border-radius:999px}
+  .cover-shade{position:absolute;inset:auto 0 0 0;height:60%;background:linear-gradient(to top,rgba(25,20,12,.72),rgba(25,20,12,0))}
+  .cover-title{position:absolute;left:16px;right:16px;bottom:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+  .cover-name{display:block;font-size:1.35rem;font-weight:700;line-height:1.15}
+  .cover-sub{display:block;font-size:.85rem;opacity:.92}
+  .chip{position:absolute;top:10px;right:10px;background:rgba(255,253,248,.9);color:var(--ink);font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:999px}
+  .plant-actions{display:flex;gap:4px;flex-wrap:nowrap;align-items:center}
+  .plant-actions .btn.small{padding:6px 7px}
+  .plant-actions .btn{white-space:nowrap}
+  .plant-actions .btn.ghost{padding:6px 5px}
+  .plant-actions .grow{flex:1;min-width:0}
+  /* first-photo picker */
+  .firstphoto{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .firstphoto img{width:64px;height:64px;object-fit:cover;border-radius:12px;box-shadow:var(--shadow)}
+  /* photo dialog */
+  #photoDlg{z-index:65}
+  .pd-pick{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+  .pd-pick .btn{flex:1;min-width:150px;padding:14px}
+  .pd-preview{margin:10px 0;text-align:center}
+  .pd-preview img{max-width:100%;max-height:46vh;border-radius:14px;box-shadow:var(--shadow);display:block;margin:0 auto 6px}
+  .pd-busy{padding:20px;text-align:center;color:var(--muted)}
+  /* progress sheet */
+  .sheet{position:fixed;inset:0;background:var(--bg);overflow-y:auto;z-index:55;-webkit-overflow-scrolling:touch}
+  .sheet[hidden]{display:none}
+  .sheet-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(245,241,232,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .sheet-title{font-size:1.15rem;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sheet-inner{max-width:720px;margin:0 auto;padding:16px 16px 60px}
+  .hero{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(160deg,#e9e0cf,#c9b99b);box-shadow:0 12px 30px rgba(60,45,20,.15)}
+  .hero img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero .cover-emoji{font-size:5rem;top:50%}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px;margin:14px 0 6px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
+  .stat b{display:block;font-family:var(--serif);font-size:1.35rem;color:var(--green-d)}
+  .stat span{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .timeline{position:relative;margin:22px 0 0;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--leaf),var(--soil));opacity:.5;border-radius:2px}
+  .tl-item{position:relative;margin-bottom:26px}
+  .tl-item::before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:3px solid var(--leaf)}
+  .tl-date{font-size:.85rem;color:var(--muted);margin-bottom:6px}
+  .tl-date b{color:var(--green-d);font-family:var(--serif);font-size:1.05rem;margin-right:6px}
+  .tl-photo{display:block;width:100%;border:0;padding:0;background:none;cursor:zoom-in;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(60,45,20,.13)}
+  .tl-photo img{display:block;width:100%;height:auto;max-height:70vh;object-fit:cover}
+  .tl-caption{font-family:var(--serif);font-size:1.05rem;margin:8px 2px 4px;font-style:italic}
+  .tl-actions{display:flex;gap:4px;flex-wrap:wrap}
+  .badge-cover{font-size:.75rem;font-weight:700;color:var(--soil);background:var(--soil-l);border-radius:999px;padding:4px 10px;align-self:center}
+  /* viewer */
+  .viewer{position:fixed;inset:0;background:#0d0b08;z-index:70;display:flex;flex-direction:column;color:#fff;touch-action:pan-y}
+  .viewer[hidden]{display:none}
+  .vw-top,.vw-bottom{display:flex;align-items:center;gap:8px;padding:10px 12px}
+  .vw-top{justify-content:space-between}
+  .vw-stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;user-select:none}
+  .vw-stage img{-webkit-user-drag:none;pointer-events:none;max-width:100%;max-height:100%;object-fit:contain;transition:opacity .15s}
+  .vw-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.14);color:#fff;border:0;width:46px;height:46px;border-radius:50%;font-size:1.4rem;cursor:pointer}
+  .vw-nav:hover{background:rgba(255,255,255,.25)}
+  .vw-nav[disabled]{opacity:.25;cursor:default}
+  .vw-prev{left:10px}.vw-next{right:10px}
+  .vw-bottom{flex-direction:column;align-items:stretch;padding-bottom:18px}
+  .vw-cap{font-family:var(--serif);font-size:1.05rem;font-style:italic;min-height:1.3em}
+  .vw-meta{font-size:.85rem;opacity:.75}
+  .viewer .btn.ghost{color:#eee}
+  .viewer .btn.ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+  /* ---- location (room / cool spot) ---- */
+  .locbadge{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .locbadge.room{background:#f6e7d3;color:#8a4b1c;border:1px solid #ecd3b2}
+  .locbadge.cool{background:#e2edf3;color:#245a74;border:1px solid #c7dbe6}
+  .seg{display:grid;gap:6px;margin-top:8px}
+  .seg button{text-align:left;font:inherit;font-size:.9rem;font-weight:600;padding:9px 11px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  .seg button small{display:block;font-weight:400;color:var(--muted)}
+  .seg button.on{border-color:var(--green);background:var(--green-l)}
+  .warnbox{margin-top:8px;font-size:.88rem;background:var(--warn-l);color:#7a3412;border:1px solid #f1c7b0;border-radius:10px;padding:8px 10px}
+  .warnbox[hidden]{display:none}
+  .suggest{margin-top:8px;font-size:.9rem;background:#edf3f6;border:1px solid #cfe0e8;border-radius:10px;padding:8px 10px}
+  .locpick{border:0;padding:0;margin:12px 0 0;display:grid;gap:8px}
+  .locpick legend{font-weight:600;font-size:.9rem;margin-bottom:6px;padding:0}
+  .locopt{display:flex;gap:10px;align-items:flex-start;margin:0;font-weight:400;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;cursor:pointer}
+  .locopt:has(input:checked){border-color:var(--green);background:var(--green-l)}
+  .locopt input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--green);flex:0 0 auto}
+  .locopt b{display:block;font-size:.95rem}
+  .locopt .places{font-weight:500;color:var(--muted)}
+  .locopt small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+  .roomtips{margin-bottom:18px}
+  .roomtips summary{cursor:pointer;font-weight:700;font-family:var(--serif);font-size:1.05rem;color:var(--green-d)}
+  .roomtips summary .muted{font-family:system-ui,sans-serif;font-weight:400}
+  .roomtips .tips li{margin:6px 0}
+  @media (max-width:560px){
+    .brand h1{font-size:1.35rem}
+    nav button{padding:9px 12px;font-size:.95rem}
+    .two{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+    .modal{padding:16px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🌱</span>
+      <div><h1>Overwinter</h1><p>Keep your garden plants alive indoors until spring</p></div>
+    </div>
+    <nav role="tablist" aria-label="Sections">
+      <button role="tab" id="tab-plants" aria-controls="view-plants" aria-selected="true" data-view="plants">🪴 Your Plants</button>
+      <button role="tab" id="tab-equipment" aria-controls="view-equipment" aria-selected="false" data-view="equipment">🧰 Recommended Equipment</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="view-plants" role="tabpanel" aria-labelledby="tab-plants">
+    <div class="spread">
+      <div><h2>Your Plants</h2><p class="sub">Watering schedules and trimming reminders for everything you're overwintering.</p></div>
+      <button class="btn" id="addPlantBtn">＋ Add plant</button>
+    </div>
+    <div id="dueBox"></div>
+    <details class="card roomtips" id="roomTips">
+      <summary>🏠 Room temperature tips <span class="muted">— for plants in an office, dining room or living area</span></summary>
+      <p class="muted">No garage or basement space? Plenty of plants overwinter fine in a regular room (~68–72°F). They stay active, so they need more water and light than dormant plants — and heated rooms are dry.</p>
+      <ul class="tips">
+        <li><b>Humidity tray:</b> set pots on a tray of pebbles with water just below the pot bottoms, or group plants together. A small humidifier helps too.</li>
+        <li><b>Mind the heat:</b> keep plants away from heat vents, radiators and space heaters — and off cold, drafty windowsills at night.</li>
+        <li><b>Grow light on a timer:</b> 12–16 hours a day, a few inches to a foot above the leaves. A plug-in timer makes it automatic.</li>
+        <li><b>Water by feel:</b> check the soil twice a week; water when the top inch is dry, then let it drain. Never leave pots sitting in water.</li>
+        <li><b>Pest patrol:</b> warm, dry air brings spider mites and aphids. Check leaf undersides weekly and rinse foliage in the sink or shower if needed.</li>
+        <li><b>Airflow:</b> a gentle fan reduces mildew and makes stems sturdier.</li>
+        <li><b>Go easy on fertilizer</b> until late winter, when days get longer.</li>
+      </ul>
+      <p class="muted" style="margin-bottom:0">Have a cool spot instead (garage, basement, someplace cool)? Most cut-back peppers, eggplants, figs and lemongrass rest dormant there with very little water and light — switch the plant to <b>❄️ Cool spot</b> on its card. Tomato and basil cuttings should stay warm.</p>
+    </details>
+    <div id="plantList" class="grid"></div>
+    <p class="disclaimer">🌿 All care tips and watering intervals are <b>general guidance</b> only. Every home is different — always check the soil with your finger before watering and adjust intervals to suit your plants.</p>
+  </section>
+
+  <section id="view-equipment" role="tabpanel" aria-labelledby="tab-equipment" hidden>
+    <h2>Recommended Equipment</h2>
+    <p class="sub">The basics that make overwintering indoors much easier. We recommend American-made gear wherever we can find it.</p>
+    <p class="disclosure"><span id="affDisclosure"></span><br><span id="checkoutNote"></span></p>
+    <div id="equipList" class="grid"></div>
+    <div class="cartbar" id="cartBar" role="region" aria-label="Selected items"></div>
+  </section>
+</main>
+
+<footer>
+  Your data is stored only in this browser (localStorage) — no account, nothing uploaded.
+  <div class="row" style="justify-content:center;margin-top:8px">
+    <button class="btn ghost" id="exportBtn">⬇ Export backup</button>
+    <button class="btn ghost" id="importBtn">⬆ Import backup</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</footer>
+
+<!-- Onboarding -->
+<div class="overlay" id="onboard" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="obTitle">
+    <div id="obStep1">
+      <h2 id="obTitle">👋 Welcome to Overwinter</h2>
+      <p class="sub">Which plants are you overwintering indoors this year? Pick all that apply — you can add more anytime from <b>Your Plants</b>.</p>
+      <div class="picker" id="obPicker"></div>
+      <div class="actions">
+        <button class="btn" id="obNext" disabled>Next →</button>
+      </div>
+    </div>
+    <div id="obStep2" hidden>
+      <h2>Tell us about them</h2>
+      <p class="sub">Give each plant a nickname and the date it came indoors. Watering intervals start from sensible defaults that you can change later.</p>
+      <form id="obForm"><div id="obPlants"></div>
+        <div class="actions">
+          <button type="button" class="btn secondary" id="obBack">← Back</button>
+          <button type="submit" class="btn" id="obSave">Save my plants</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add / edit plant -->
+<div class="overlay" id="editor" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="edTitle">
+    <h2 id="edTitle">Add a plant</h2>
+    <form id="edForm">
+      <label for="edType">Plant type</label>
+      <select id="edType" required></select>
+      <label for="edName">Name / nickname</label>
+      <input id="edName" required maxlength="60" placeholder="e.g. Big Jalapeño">
+      <div id="edLoc"></div>
+      <div class="two">
+        <div><label for="edDate">Date brought indoors</label><input type="date" id="edDate" required></div>
+        <div><label for="edInterval">Water every (days)</label><input type="number" id="edInterval" min="1" max="120" required>
+          <div class="hint" id="edIntervalHint"></div></div>
+      </div>
+      <label for="edNotes">Notes (optional)</label>
+      <textarea id="edNotes" maxlength="1000" placeholder="Variety, location (e.g. basement shelf), anything to remember…"></textarea>
+      <div id="edFirstPhoto" class="firstphoto"></div>
+      <div class="actions">
+        <button type="button" class="btn secondary" id="edCancel">Cancel</button>
+        <button type="submit" class="btn" id="edSave">Save plant</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Photo add / edit dialog -->
+<div class="overlay" id="photoDlg" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pdTitle">
+    <h2 id="pdTitle">Add a progress photo</h2>
+    <p class="sub" id="pdSub"></p>
+    <div class="pd-pick" id="pdPick">
+      <label class="btn" for="pdCam">📸 Take photo</label>
+      <label class="btn secondary" for="pdGal">🖼️ Choose from gallery</label>
+      <input type="file" id="pdCam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="pdGal" accept="image/*" hidden>
+    </div>
+    <div class="pd-busy" id="pdBusy" hidden>Preparing photo…</div>
+    <div class="pd-preview" id="pdPreview" hidden><img id="pdImg" alt="Photo preview">
+      <button type="button" class="btn ghost small" id="pdChange">Change photo</button></div>
+    <form id="pdForm">
+      <div class="two"><div><label for="pdDate">Date taken</label><input type="date" id="pdDate" required></div></div>
+      <label for="pdCaption">Caption (optional)</label>
+      <input id="pdCaption" maxlength="200" placeholder="e.g. First new leaves since moving in!">
+      <div class="actions">
+        <button type="button" class="btn secondary" id="pdCancel">Cancel</button>
+        <button type="submit" class="btn" id="pdSave" disabled>Save photo</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Progress timeline -->
+<div class="sheet" id="progress" hidden role="dialog" aria-modal="true" aria-labelledby="pgTitle">
+  <div class="sheet-bar">
+    <button class="btn ghost" id="pgBack" aria-label="Back to Your Plants">← Back</button>
+    <div class="sheet-title" id="pgTitle"></div>
+    <button class="btn small" id="pgAdd">📷 Add photo</button>
+  </div>
+  <div class="sheet-inner" id="pgBody"></div>
+</div>
+
+<!-- Full-screen photo viewer -->
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="vw-top">
+    <button class="btn ghost" id="vwClose" aria-label="Close viewer">✕ Close</button>
+    <span class="vw-meta" id="vwCount"></span>
+    <span class="row" style="gap:2px">
+      <button class="btn ghost small" id="vwCover">★ Set as cover</button>
+      <button class="btn ghost small" id="vwDelete" aria-label="Delete photo">🗑️ Delete</button>
+    </span>
+  </div>
+  <div class="vw-stage" id="vwStage">
+    <button class="vw-nav vw-prev" id="vwPrev" aria-label="Previous photo">‹</button>
+    <img id="vwImg" alt="" draggable="false">
+    <button class="vw-nav vw-next" id="vwNext" aria-label="Next photo">›</button>
+  </div>
+  <div class="vw-bottom"><div class="vw-cap" id="vwCap"></div><div class="vw-meta" id="vwMeta"></div></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   AFFILIATE / SHOP CONFIG  — edit this block only
+   ---------------------------------------------------------------------
+   1) AMAZON_ASSOCIATE_TAG: paste your Amazon Associates tracking ID
+      (looks like "yourname-20"). Find it in Associates Central, top-right.
+   2) Each product's 10-character Amazon ASIN goes in `asin`
+      (e.g. "B0XXXXXXXX" — it's in the product URL after /dp/ and in
+      the "Product information" section of the Amazon page).
+   3) `url` is optional. Leave it "#" and the product's "View" link is
+      built automatically as amazon.com/dp/ASIN?tag=YOUR_TAG once the tag
+      and ASIN are set. Or paste any other affiliate link there instead.
+   The "Add all to Amazon cart" button stays disabled until the tag AND
+   every selected product's ASIN are real values (not the TODO placeholders).
+   No Amazon images or prices are shown on purpose (that requires
+   Amazon's Product Advertising API) — we use our own text + emoji.
+   ===================================================================== */
+const AFFILIATE_CONFIG = {
+  AMAZON_ASSOCIATE_TAG: "overwinter0e-20",   // <-- PASTE YOUR AMAZON ASSOCIATES TRACKING ID HERE
+  disclosure: "Disclosure: Some links on this page are affiliate links. As an Amazon Associate we earn from qualifying purchases, at no extra cost to you. We only recommend gear that's genuinely useful for overwintering.",
+  checkoutNote: "Adding items sends you to Amazon.com — review your cart and check out on Amazon. Prices and availability are set by Amazon.",
+  categories: [
+    {
+      id: "soil", icon: "🪨", title: "Potting Soil",
+      description: "A light, fast-draining potting mix keeps roots healthy and helps prevent the soggy soil that kills most overwintered plants.",
+      tips: ["Fresh, sterile mix reduces fungus gnats", "Avoid heavy garden soil indoors", "Add perlite for extra drainage if needed"],
+      products: [
+        { id: "foxfarm-ocean-forest-1.5cf", emoji: "🌊", usa: true,
+          name: "FoxFarm Ocean Forest Potting Soil, 1.5 cu ft",
+          description: "Light, well-draining, nutrient-rich mix for repotting peppers and tomatoes coming indoors.",
+          // FoxFarm has duplicate listings; if add-to-cart fails, try B01KVLYW9M or B07YV9CPJD
+          asin: "B0825F834N",   // <-- ASIN (Amazon product ID)
+          url: "#" },           // <-- optional custom affiliate link
+        { id: "espoma-organic-potting-8qt", emoji: "🌱", usa: true,
+          name: "Espoma Organic Potting Mix, 8 qt",
+          description: "Organic indoor container mix; a small bag that's good for a few pots.",
+          asin: "B002Y04TK6",
+          url: "#" }
+      ]
+    },
+    {
+      id: "pots", icon: "🪴", title: "Pots & Containers",
+      description: "Pots with good drainage. Fabric pots breathe and dry out faster, which helps prevent overwatering of dormant plants.",
+      tips: ["Drainage is a must", "Fabric pots resist root rot and circling roots", "Use saucers or a tray to protect shelves"],
+      products: [
+        { id: "smartpot-5gal-black", emoji: "🧺", usa: true,
+          name: "Smart Pots 5-Gallon Fabric Pot, Black",
+          description: "Air-pruning fabric pot that's light to carry; fits a cut-back pepper or a fig.",
+          asin: "B002JUOWB2",
+          url: "#" },
+        { id: "smartpot-3gal-5pack", emoji: "🧺", usa: true,
+          name: "Smart Pots 3-Gallon, 5 Pack",
+          description: "The classic size for overwintered peppers; fits on a shelf.",
+          asin: "B017WY3PWQ",
+          url: "#" }
+      ]
+    },
+    {
+      id: "racks", icon: "🗄️", title: "Adjustable Grow Racks / Shelving",
+      description: "Shelving with adjustable shelf heights lets you stack plants in a small space and keep lights the right distance above them.",
+      tips: ["Adjustable shelf heights", "Open wire lets light and air through", "Hang light bars from the shelf above"],
+      products: [   // only one US-made option, so just one product here
+        { id: "metro-super-erecta-48x18x74", emoji: "🗄️", usa: true,
+          name: "METRO Super Erecta 4-Tier Chrome Shelving, 48x18x74",
+          description: "Commercial-grade and adjustable in 1\" steps; open wire lets light and air through.",
+          asin: "B005V5NPVK",
+          url: "#" }
+      ]
+    },
+    {
+      id: "lights", icon: "💡", title: "LED Grow Lights",
+      description: "LED grow lights made for indoor growing keep active plants (tomato cuttings, rosemary, basil) healthy through short winter days, and help wake dormant peppers in late winter. Dormant plants need little or no light.",
+      tips: ["Full-spectrum LED: efficient and runs cool", "12–16 hours/day for actively growing plants", "A plug-in timer makes it automatic"],
+      note: "Not made in USA — we couldn't find a US-made LED grow light we'd recommend.",
+      products: [
+        { id: "barrina-t5-2ft", emoji: "💡", usa: false,
+          name: "Barrina T5 LED Grow Light Bars, 2 ft",
+          description: "Linkable bars that mount under shelves; ideal for a rack of overwintered plants.",
+          asin: "B0DCZ92BL3",
+          url: "#" },
+        { id: "spider-farmer-sf1000", emoji: "🔆", usa: false,
+          name: "Spider Farmer SF1000 LED Grow Light",
+          description: "Full-spectrum panel for a larger cluster of plants, or for waking peppers up in late winter.",
+          asin: "B07TS82HWB",
+          url: "#" }
+      ]
+    }
+  ]
+};
+/* ===================== end of affiliate config ===================== */
+
+/* ---------------------------------------------------------------------
+   PLANT TYPE DEFAULTS — GENERAL GUIDANCE for indoor overwintering.
+   Every plant has a "Where is it kept?" setting (p.location):
+     room = Room temperature (office, dining room, living area), ~68–72°F,
+            often dry indoor air -> plants stay active: more water, strong light.
+     cool = Cool spot (garage, basement, someplace cool) at the type's ideal
+            overwintering range -> semi-dormant: much less water, low light.
+   interval = default days between waterings (conservative; always check soil).
+   reminder = recurring care/trim check (every N days).
+
+   Sources consulted (Oct 2026) — values are conservative, rounded summaries:
+   - Ask Extension / UMN Extension Master Gardeners: dormant peppers >50°F, a little light,
+     small amount of water every 3–4 weeks; remove new leaves/buds.
+     https://ask.extension.org/kb/faq.php?id=782282 , https://ask.extension.org/kb/faq.php?id=812297 (50–60°F)
+   - Penn State Extension (Bucks Co. Master Gardener): peppers active indoors 60–70°F, water ~weekly,
+     sunny window/grow lights; or dormant ~55°F, water every ~3 weeks.
+     http://buckscountymastergardeners.blogspot.com/2016/10/overwintering-pepper-plants-by-master.html
+   - Oregon State Extension (Ask Extension answer): active peppers need nights >50°F, days ~70°F, supplemental light.
+     https://ask.extension.org/kb/faq.php?id=887184
+   - Iowa State Extension: container woody plants dormant at 20–45°F (unheated attached garage).
+     https://yardandgarden.extension.iastate.edu/faq/how-can-i-over-winter-container-grown-trees-and-shrubs
+   - UNH Extension: figs dormant in unheated basement/garage, water when top 2" dry (every 1–2+ weeks or less);
+     active figs: water when top 1–2" dry. https://extension.unh.edu/blog/2021/01/it-possible-grow-edible-fig-container
+   - Ask Extension (CSU): dormant fig cool & dry, water about once a month. https://ask.extension.org/kb/faq.php?id=214420
+   - UNH Extension: rosemary best at 45–55°F in bright light; water when quite dry; spider mites in dry air.
+     https://extension.unh.edu/blog/2020/11/houseplant-winter-care-qa
+   - Illinois Extension: rosemary overwintering ~50–60°F, very bright light; homes are too warm & dry.
+     https://extension.illinois.edu/blogs/garden-scoop/2018-10-18-rosemary
+   - UW–Madison Extension Kenosha Co.: rosemary ≤65°F, away from heat registers, check soil 1–2×/week, mist/humidifier.
+     https://kenosha.extension.wisc.edu/2020/12/13/holiday-rosemary/
+   - Penn State Extension "Growing Herbs Indoors": 65–70°F day / 55–60°F night; 14–16 h under lights 6–12" away;
+     basil can't survive <50°F, never let basil dry out; let thyme/sage/oregano dry slightly; pebble trays/humidity.
+     https://extension.psu.edu/growing-herbs-indoors
+   - UMN Extension: basil indoors needs bright light, artificial light 10–12 h; it will eventually flower & die.
+     https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/growing-basil
+   - Utah State Extension: tomatoes harmed below 50°F; keep tops 3–6" from lights.
+     https://extension.usu.edu/archive/can-you-grow-tomatoes-in-the-winter
+   - UNH Extension (Ask Extension): indoor tomatoes need 16–18 h artificial light. https://ask.extension.org/kb/faq.php?id=915046
+   - Gardening Know How: tomato cuttings 3–5", root in water, bright window/grow lights.
+     https://www.gardeningknowhow.com/edible/vegetables/tomato/overwintering-tomatoes.htm
+   - Oregon State Extension (Master Gardener handout) + Bonnie Plants: lemongrass cut back, kept cool (~50–60°F)
+     and nearly dry while dormant. https://extension.oregonstate.edu/sites/extd8/files/documents/54611/5-overwinter-plants.pdf
+     https://bonnieplants.com/blogs/how-to-grow/growing-lemongrass
+   - Eggplant: no specific extension overwintering guide found; follows pepper guidance (same family), kept >50°F.
+   --------------------------------------------------------------------- */
+const LOCATIONS = {
+  room: { icon: "🏠", label: "Room temperature", places: "office, dining room, living area", temp: "68–72°F",
+          blurb: "Plants stay active in a warm room: more water, strong light, and watch for dry air & pests." },
+  cool: { icon: "❄️", label: "Cool spot", places: "garage, basement, someplace cool",
+          blurb: "Plants rest semi-dormant: much less water and low light." }
+};
+const ROOM_PEST = { every: 7, text: "Check leaf undersides for spider mites & aphids; rinse foliage if needed" };
+const PLANT_TYPES = {
+  pepper: {
+    label: "Pepper", emoji: "🌶️", summary: "Cut back to the Y; dormant in a cool spot or active in a warm room",
+    ideal: "55–60°F",
+    trim: [
+      "Before bringing indoors: cut back to the main 'Y' (the first fork), leaving 2–3 short branches.",
+      "Strip all remaining leaves, flowers and fruit.",
+      "Rinse roots / trim root ball and repot in fresh, sterile potting mix to avoid bringing pests inside.",
+      "In late winter (~6–8 weeks before last frost): move to warmth + light and water more as new growth appears."
+    ],
+    room: { status: "Semi-active", interval: 7, range: "every 5–7 days, when the top inch is dry",
+      water: "In a warm room the plant stays semi-active and dries out faster. Water when the top inch of soil is dry, then let it drain — never leave it sitting in water.",
+      light: "Grow light 12–16 h/day (or your sunniest window + a light).",
+      tips: ["Expect some new leaves — that's fine at room temperature; pinch flower buds to save energy.",
+             "Dry indoor air invites aphids and spider mites: check leaf undersides weekly.",
+             "Keep away from heat vents and radiators; a pebble tray helps with humidity.",
+             "No fertilizer until late winter."],
+      reminder: ROOM_PEST },
+    cool: { status: "Dormant", interval: 21, range: "every 2–4 weeks, lightly",
+      water: "Dormant peppers use very little water. Give a small drink only when the soil is dry — just enough that the roots don't go bone-dry. Soggy soil causes root rot.",
+      light: "Low light is fine — a little indirect light; no grow light needed.",
+      tips: ["Keep above 50°F (55–60°F is ideal).", "Remove any new leaves or buds that sprout to keep it dormant.", "No fertilizer while dormant."],
+      reminder: { every: 21, text: "Check for aphids and remove new growth" } }
+  },
+  tomato: {
+    label: "Tomato (cuttings)", emoji: "🍅", summary: "Kept actively growing from cuttings under lights",
+    ideal: "65–75°F", warmLover: true,
+    trim: [
+      "Tomatoes don't go dormant well — take 4–6\" cuttings from healthy suckers or branch tips before frost.",
+      "Remove lower leaves and root in water or moist potting mix (roots in ~1–2 weeks).",
+      "Pinch off flowers over winter so energy goes to roots and leaves.",
+      "Take fresh cuttings from your cuttings if they get leggy; pot up in late winter."
+    ],
+    room: { status: "Active growth", interval: 4, range: "every 3–5 days, keep evenly moist",
+      water: "Actively growing cuttings: keep soil evenly moist but never waterlogged. Water when the top ½ inch is dry.",
+      light: "Grow light 14–16 h/day, kept 3–6\" above the tops.",
+      tips: ["Room temperature is ideal for tomato cuttings.", "Run a small fan or brush the tops daily for sturdier stems.", "Watch for whiteflies, aphids and spider mites."],
+      reminder: { every: 7, text: "Pinch flowers, remove yellow leaves, check for pests" } },
+    cool: { status: "Stalled (too cool)", interval: 6, range: "every 5–7 days — less in a cool spot",
+      warning: "Not recommended: tomatoes stall below 60°F and are harmed below 50°F. Move cuttings to a warm room (65–75°F) if you can.",
+      water: "Cool soil stays wet longer — water only when the top ½–1 inch is dry to avoid rot.",
+      light: "Still needs a grow light 14–16 h/day.",
+      tips: ["Keep well above 50°F; a heat mat under the pots can help.", "Move to a warm room as soon as possible."],
+      reminder: { every: 7, text: "Check for rot, yellowing and pests" } }
+  },
+  eggplant: {
+    label: "Eggplant", emoji: "🍆", summary: "Cut back like peppers; dormant or semi-active",
+    ideal: "55–60°F",
+    trim: [
+      "Before bringing indoors: cut stems back by about half to two-thirds, to a main fork.",
+      "Remove leaves, flowers and fruit.",
+      "Repot in fresh mix and check carefully for spider mites and flea beetles.",
+      "In late winter: increase warmth, light and water to wake it up."
+    ],
+    room: { status: "Semi-active", interval: 7, range: "every 5–7 days, when the top inch is dry",
+      water: "Like peppers at room temperature: water when the top inch is dry and let it drain.",
+      light: "Grow light 12–16 h/day.",
+      tips: ["Eggplants are spider-mite magnets in dry air — check leaf undersides weekly.", "Pebble tray or grouped pots raise humidity.", "Keep away from heat vents."],
+      reminder: ROOM_PEST },
+    cool: { status: "Dormant", interval: 21, range: "every 2–4 weeks, lightly",
+      water: "Water lightly only when the soil is dry. Overwatering a dormant plant is the most common cause of loss.",
+      light: "Low light is fine.",
+      tips: ["Keep above 50°F — eggplant is more cold-sensitive than pepper.", "No fertilizer while dormant."],
+      reminder: { every: 21, text: "Inspect stems for spider mites; remove new growth" } }
+  },
+  rosemary: {
+    label: "Rosemary", emoji: "🌿", summary: "Loves a cool, very bright spot",
+    ideal: "45–60°F",
+    trim: [
+      "Lightly trim before moving indoors to tidy shape; don't cut into old bare wood.",
+      "Snip sprigs sparingly over winter — no more than 1/3 of the plant.",
+      "Good air circulation helps prevent powdery mildew."
+    ],
+    room: { status: "Evergreen, active", interval: 6, range: "every 5–7 days — check soil twice a week",
+      water: "Warm, dry rooms dry rosemary fast, but it also rots if kept wet. Check twice a week; water thoroughly only when the top inch is dry, then drain.",
+      light: "Maximum light: south window plus grow light 14–16 h/day.",
+      tips: ["Raise humidity: mist weekly, use a pebble tray or humidifier.", "Keep air moving (small fan) to prevent powdery mildew.", "Keep away from heat vents and radiators.", "Spider mites love warm, dry rosemary — rinse foliage if you see webbing."],
+      reminder: { every: 7, text: "Check for spider mites & powdery mildew; rotate pot" } },
+    cool: { status: "Evergreen, slow growth", interval: 10, range: "every 7–14 days, when the soil is fairly dry",
+      water: "Cool temperatures mean less water. Water thoroughly when the soil is fairly dry, then drain. Don't let the root ball go bone-dry.",
+      light: "Still needs bright light: a sunny window or grow light 12–16 h/day.",
+      tips: ["45–60°F with bright light is ideal (e.g. a bright basement window or cool sunroom).", "Avoid freezing — keep above ~40°F."],
+      reminder: { every: 21, text: "Light trim / check for powdery mildew" } }
+  },
+  herbs: {
+    label: "Woody herbs (thyme, sage, oregano)", emoji: "🌱", summary: "Cool and bright, on the dry side",
+    ideal: "55–65°F",
+    trim: [
+      "Before bringing indoors: trim back by about 1/3 and remove dead stems.",
+      "Pot in fast-draining mix; terracotta pots help keep roots dry.",
+      "Harvest lightly over winter to keep plants bushy."
+    ],
+    room: { status: "Slow growth", interval: 7, range: "every 5–7 days, let soil dry slightly",
+      water: "Let the soil dry slightly between waterings — these herbs prefer the dry side.",
+      light: "Grow light 14–16 h/day, 6–12\" above, or a sunny south window.",
+      tips: ["Group pots or use a pebble tray in dry, heated rooms.", "Keep away from heat vents and cold drafts.", "Watch for spider mites and aphids."],
+      reminder: ROOM_PEST },
+    cool: { status: "Semi-dormant", interval: 14, range: "every 10–14 days, when dry",
+      water: "Growth slows in a cool spot — water only when the soil is dry.",
+      light: "Bright light 12+ h/day (window or grow light).",
+      tips: ["Most survive the mid-40s°F, but 55–65°F is safer.", "Good airflow prevents mildew."],
+      reminder: { every: 21, text: "Light harvest/trim to keep bushy" } }
+  },
+  basil: {
+    label: "Basil (cuttings)", emoji: "🌿", summary: "Warm-loving and short-lived — keep in a warm room",
+    ideal: "65–75°F", warmLover: true,
+    trim: [
+      "Take 4\" tip cuttings before frost and root them in water.",
+      "Pinch flower buds as soon as they appear.",
+      "Pinch growing tips just above a pair of leaves to keep it bushy.",
+      "Basil is an annual: it will eventually flower and decline even indoors — start fresh in spring."
+    ],
+    room: { status: "Active growth", interval: 4, range: "every 3–5 days, never let it dry out",
+      water: "Keep lightly, evenly moist — basil wilts quickly when dry but rots in soggy soil.",
+      light: "Grow light 12–16 h/day, about 6–12\" above.",
+      tips: ["Room temperature is ideal for basil.", "Keep off cold windowsills at night.", "Watch for aphids and whiteflies."],
+      reminder: { every: 7, text: "Pinch tips & flower buds" } },
+    cool: { status: "Cold-stressed", interval: 5, range: "every 4–6 days — soil dries slower when cool",
+      warning: "Not recommended: basil is damaged below 50°F and can die near 45°F. Move it to a warm room (65°F+).",
+      water: "Cool soil stays wet longer; water when the surface is just dry.",
+      light: "Still needs a grow light 12–16 h/day.",
+      tips: ["Move to a warm room as soon as possible."],
+      reminder: { every: 7, text: "Check for blackened leaves (cold damage)" } }
+  },
+  fig: {
+    label: "Fig", emoji: "🌳", summary: "Dormant & dark in a cool spot, or a houseplant in a warm room",
+    ideal: "30–50°F",
+    trim: [
+      "For dormancy: let leaves drop naturally after the first light frost, then move it in.",
+      "Prune dead, crossing or damaged branches while dormant.",
+      "In early spring, move to light gradually as buds swell; prune for shape before leaf-out."
+    ],
+    room: { status: "Houseplant (won't go dormant)", interval: 7, range: "about weekly, when the top 1–2 inches are dry",
+      water: "A fig in a warm room won't go dormant — treat it as a houseplant. Water when the top 1–2 inches are dry, then drain.",
+      light: "Bright light: sunniest window and/or grow light 12–14 h/day.",
+      tips: ["It may drop leaves as it adjusts to indoor light — that's normal; keep conditions steady.", "Low light causes weak, leggy growth: more light is better.", "Check for spider mites and scale; mist or use a pebble tray."],
+      reminder: ROOM_PEST },
+    cool: { status: "Fully dormant", interval: 28, range: "about once a month, lightly",
+      water: "Dormant figs die more often from overwatering than drying out. About monthly, check 2–3 inches down and give a little water only if dry.",
+      light: "None needed — a dark spot is fine while dormant.",
+      tips: ["30–50°F is ideal; wrap the pot if roots could drop below ~20°F.", "No fertilizer while dormant."],
+      reminder: { every: 30, text: "Check soil isn't bone-dry; look for mold" } }
+  },
+  lemongrass: {
+    label: "Lemongrass", emoji: "🌾", summary: "Cut back; dormant when cool, slow-growing when warm",
+    ideal: "50–60°F",
+    trim: [
+      "Before bringing indoors: divide a few stalks, pot them, and cut leaves back to a few inches.",
+      "Trim off brown leaf tips as needed."
+    ],
+    room: { status: "Slow growth", interval: 7, range: "every 5–7 days, when the top inch is dry",
+      water: "Keeps growing slowly in a warm room. Water when the top inch is dry.",
+      light: "Bright window or grow light 12–14 h/day.",
+      tips: ["Dry air browns leaf tips — a pebble tray helps.", "Keep away from heat vents."],
+      reminder: { every: 14, text: "Trim brown tips; check for spider mites" } },
+    cool: { status: "Dormant", interval: 21, range: "every 2–4 weeks, barely moist",
+      water: "Dormant lemongrass needs only enough water to keep the roots alive.",
+      light: "Low light is fine while dormant.",
+      tips: ["50–60°F; move to warmth and light when new shoots appear in spring."],
+      reminder: { every: 30, text: "Check soil and trim brown tips" } }
+  },
+  custom: {
+    label: "Other / custom", emoji: "🪴", summary: "Your own care plan",
+    ideal: "50–60°F",  // varies by plant
+    trim: [
+      "Remove dead, yellow or diseased leaves.",
+      "Add your own trimming notes in the plant's Notes field."
+    ],
+    room: { status: "Active", interval: 7, range: "check soil — water when the top inch is dry",
+      water: "Start conservatively: water when the top inch of soil is dry and adjust as you learn what your plant needs.",
+      light: "Bright window or grow light 12–16 h/day for active plants.",
+      tips: ["Dry indoor air: use a pebble tray, keep away from heat vents.", "Inspect weekly for spider mites, aphids, whiteflies and fungus gnats."],
+      reminder: ROOM_PEST },
+    cool: { status: "Resting", interval: 14, range: "check soil — usually every 2+ weeks",
+      water: "Cool, resting plants need much less water. Check the soil before every watering.",
+      light: "Low to moderate light, depending on the plant.",
+      tips: ["Check whether your plant tolerates cool temperatures before storing it cold."],
+      reminder: { every: 14, text: "General check: pests, dead leaves" } }
+  }
+};
+const DEFAULT_LOCATION = "room";
+const locOf  = p => (p && p.location === "cool") ? "cool" : "room";
+/** Merged care info for a plant (or a type + location). */
+function careFor(type, loc){ const t = PLANT_TYPES[type] || PLANT_TYPES.custom; return Object.assign({ loc }, t[loc]); }
+const careOf = p => careFor(p.type, locOf(p));
+function locTemp(type, loc){ return loc === "cool" ? (PLANT_TYPES[type]||PLANT_TYPES.custom).ideal : LOCATIONS.room.temp; }
+function locBadge(type, loc){
+  const L = LOCATIONS[loc];
+  return `<span class="locbadge ${loc}" title="${esc(L.label)} (${esc(L.places)})">${L.icon} ${loc==="room"?"Room temp":"Cool spot"} ${esc(locTemp(type,loc))}</span>`;
+}
+
+/* ------------------------------- storage ------------------------------- */
+const STORE_KEY = "overwinter.v1";
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return { plants: [] };
+    const s = JSON.parse(raw);
+    if(!s || !Array.isArray(s.plants)) return { plants: [] };
+    s.plants = s.plants.map(normalizePlant);
+    return s;
+  }catch(e){ console.warn("Could not read saved data", e); return { plants: [] }; }
+}
+/* older saved plants have no location: default to room temperature, keep their interval */
+function normalizePlant(p){ const q = Object.assign({ waterHistory: [] }, p); if(q.location!=="room" && q.location!=="cool") q.location = DEFAULT_LOCATION; return q; }
+function saveState(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch(e){ toast("⚠️ Couldn't save — browser storage may be full or disabled."); }
+}
+let state = loadState();
+
+/* -------------------------------- dates -------------------------------- */
+const pad = n => String(n).padStart(2,"0");
+function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function toISO(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function addDays(iso,n){ const d=parseISO(iso); d.setDate(d.getDate()+n); return toISO(d); }
+function diffDays(a,b){ return Math.round((parseISO(a)-parseISO(b))/86400000); } // a - b
+function fmt(iso){ return parseISO(iso).toLocaleDateString(undefined,{month:"short",day:"numeric",year: parseISO(iso).getFullYear()!==new Date().getFullYear()?"numeric":undefined}); }
+function rel(iso){
+  const d = diffDays(iso, todayISO());
+  if(d===0) return "today"; if(d===1) return "tomorrow"; if(d===-1) return "yesterday";
+  return d>0 ? `in ${d} days` : `${-d} days ago`;
+}
+
+/* ------------------------------ plant logic ----------------------------- */
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const typeOf = p => PLANT_TYPES[p.type] || PLANT_TYPES.custom;
+function lastWatered(p){ return p.waterHistory.length ? p.waterHistory[p.waterHistory.length-1] : null; }
+function nextWater(p){ return addDays(lastWatered(p) || p.indoorDate, p.intervalDays); }
+function nextCheck(p){ return addDays(p.lastCheck || p.indoorDate, careOf(p).reminder.every); }
+function makePlant({type,name,indoorDate,notes,intervalDays,location}){
+  location = location==="cool" ? "cool" : DEFAULT_LOCATION;
+  return { id: uid(), type, name: name.trim(), indoorDate, notes: (notes||"").trim(),
+           location, intervalDays: Number(intervalDays) || careFor(type, location).interval,
+           waterHistory: [], lastCheck: null, created: todayISO() };
+}
+function findPlant(id){ return state.plants.find(p=>p.id===id); }
+
+/* -------------------------------- helpers ------------------------------- */
+const $ = s => document.querySelector(s);
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+let toastTimer;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2200); }
+function statusTag(iso){
+  const d = diffDays(iso, todayISO());
+  if(d<0) return `<span class="tag over">Overdue ${-d}d</span>`;
+  if(d===0) return `<span class="tag today">Due today</span>`;
+  return `<span class="tag">${rel(iso)}</span>`;
+}
+
+/* ------------------------------- rendering ------------------------------ */
+function renderDue(){
+  const today = todayISO(); const items = [];
+  state.plants.forEach(p=>{
+    const nw = nextWater(p);
+    if(nw <= today) items.push({p, kind:"water", date:nw});
+    const nc = nextCheck(p);
+    if(nc <= today) items.push({p, kind:"check", date:nc});
+  });
+  items.sort((a,b)=>a.date.localeCompare(b.date));
+  const box = $("#dueBox");
+  if(!state.plants.length){ box.innerHTML=""; return; }
+  if(!items.length){
+    box.innerHTML = `<div class="card due"><h3>✅ Due today</h3><p class="muted" style="margin:0">Nothing due today. Next watering: ${upcomingText()}.</p></div>`;
+    return;
+  }
+  box.innerHTML = `<div class="card due has"><h3>⏰ Due today (${items.length})</h3><ul>${items.map(it=>{
+    const t = typeOf(it.p);
+    if(it.kind==="water") return `<li><span>${t.emoji} <b>${esc(it.p.name)}</b> — water ${statusTag(it.date)}</span>
+      <button class="btn water small" data-act="water" data-id="${it.p.id}">💧 Mark watered</button></li>`;
+    return `<li><span>${t.emoji} <b>${esc(it.p.name)}</b> — ✂️ ${esc(careOf(it.p).reminder.text)} ${statusTag(it.date)}</span>
+      <button class="btn secondary small" data-act="check" data-id="${it.p.id}">✓ Done</button></li>`;
+  }).join("")}</ul></div>`;
+}
+function upcomingText(){
+  const next = state.plants.map(p=>({p,d:nextWater(p)})).sort((a,b)=>a.d.localeCompare(b.d))[0];
+  return next ? `<b>${esc(next.p.name)}</b> ${rel(next.d)} (${fmt(next.d)})` : "—";
+}
+
+function daysIndoorsLabel(p){ const n=diffDays(todayISO(),p.indoorDate); return n<0?`Moving in ${fmt(p.indoorDate)}`: n===0?"Moved in today":`Day ${n} indoors`; }
+function renderPlants(){
+  const list = $("#plantList");
+  if(!state.plants.length){
+    list.innerHTML = `<div class="card empty" style="grid-column:1/-1"><div class="emoji">🪴</div>
+      <p>No plants yet. Add the plants you're bringing indoors for winter.</p>
+      <button class="btn" data-act="onboard">Get started</button></div>`;
+    return;
+  }
+  const sorted = [...state.plants].sort((a,b)=>nextWater(a).localeCompare(nextWater(b)));
+  list.innerHTML = sorted.map(p=>{
+    const t = typeOf(p), c = careOf(p), loc = locOf(p), nw = nextWater(p), lw = lastWatered(p), nc = nextCheck(p);
+    const due = nw <= todayISO(), sug = intervalSuggest[p.id];
+    const hist = p.waterHistory.slice(-6).reverse();
+    const cov = coverOf(p), n = photosOf(p.id).length;
+    return `<article class="card plant" data-id="${p.id}">
+      <button class="cover" data-act="${cov?"progress":"addphoto"}" data-id="${p.id}" aria-label="${cov?`Open progress photos for ${esc(p.name)}`:`Add a first photo of ${esc(p.name)}`}">
+        ${cov?`<img src="${photoURL(cov)}" alt="${esc(p.name)} — cover photo" loading="lazy">`:`<span class="cover-emoji" aria-hidden="true">${t.emoji}</span><span class="cover-hint">📷 Add a first photo</span>`}
+        <span class="cover-shade"></span>
+        <span class="cover-title"><span class="cover-name">${esc(p.name)}</span><span class="cover-sub">${esc(t.label)} · ${daysIndoorsLabel(p)}</span></span>
+        ${n?`<span class="chip">📸 ${n}</span>`:""}
+      </button>
+      <div class="pbody2">
+      <div class="plant-actions">
+        <button class="btn secondary small" data-act="addphoto" data-id="${p.id}">📷 Add photo</button>
+        <button class="btn secondary small" data-act="progress" data-id="${p.id}">🗓️ Progress</button>
+        <span class="grow"></span>
+        <button class="btn ghost small" data-act="edit" data-id="${p.id}" aria-label="Edit ${esc(p.name)}" title="Edit">✏️</button>
+        <button class="btn ghost small" data-act="remove" data-id="${p.id}" aria-label="Remove ${esc(p.name)}" title="Remove">🗑️</button>
+      </div>
+      <p class="muted" style="margin:8px 0 0"><span class="tag soil">${esc(c.status)}</span> Indoors since ${fmt(p.indoorDate)}</p>
+
+      <div class="section locsec">
+        <h4>📍 Where is it kept?</h4>
+        <div class="spread" style="align-items:center">
+          <div>${locBadge(p.type, loc)}<div class="muted" style="margin-top:4px">Ideal overwintering temp for ${esc(t.label.toLowerCase())}: <b>${esc(t.ideal)}</b></div></div>
+          <button class="btn secondary small" data-act="togglelocpick" data-id="${p.id}" aria-expanded="${locPickOpen===p.id}">Change spot</button>
+        </div>
+        ${locPickOpen===p.id ? `<div class="seg" role="group" aria-label="Where is ${esc(p.name)} kept?">${["room","cool"].map(k=>`<button class="${loc===k?"on":""}" data-act="setloc" data-loc="${k}" data-id="${p.id}" aria-pressed="${loc===k}">${LOCATIONS[k].icon} ${LOCATIONS[k].label} <small>(${LOCATIONS[k].places}) · ${esc(locTemp(p.type,k))}</small></button>`).join("")}</div>` : ""}
+        ${c.warning ? `<div class="warnbox" role="note">⚠️ ${esc(c.warning)}</div>` : ""}
+        ${sug ? `<div class="suggest" role="status">💧 Suggested watering for ${loc==="room"?"room temperature":"a cool spot"}: <b>every ${sug} days</b> (you have every ${p.intervalDays}).
+            <span class="row" style="gap:6px;margin-top:6px"><button class="btn small" data-act="usesuggest" data-id="${p.id}">Use ${sug} days</button><button class="btn ghost small" data-act="keepsuggest" data-id="${p.id}">Keep mine</button></span></div>` : ""}
+        <details style="margin-top:8px"><summary>Care tips for ${loc==="room"?"room temperature":"a cool spot"} (general guidance)</summary>
+          <ul class="tips">${c.tips.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+          ${loc==="room"?`<p class="muted" style="margin:6px 0 0">See also <a href="#" data-act="openroomtips">Room temperature tips</a>.</p>`:""}</details>
+      </div>
+
+      <div class="section">
+        <h4>💧 Watering</h4>
+        <div class="spread" style="align-items:center">
+          <div><div class="big">Next: ${fmt(nw)} ${statusTag(nw)}</div>
+            <div class="muted">Every ${p.intervalDays} day${p.intervalDays==1?"":"s"} · Last watered: ${lw ? `${fmt(lw)} (${rel(lw)})` : "not yet logged"}</div></div>
+          <button class="btn water" data-act="water" data-id="${p.id}">💧 ${due?"Water now":"Mark watered"}</button>
+        </div>
+        ${hist.length ? `<div class="hist" aria-label="Watering history">${hist.map(h=>`<span>${fmt(h)}</span>`).join("")}
+          <button class="btn ghost small" data-act="undo" data-id="${p.id}" title="Remove last watering entry">↶ Undo last</button></div>` : ""}
+        <details style="margin-top:8px"><summary>How to water (general guidance)</summary>
+          <p class="muted" style="margin:6px 0 0">${esc(c.water)} Typical ${loc==="room"?"at room temperature":"in a cool spot"}: ${esc(c.range)}.</p></details>
+        <div class="muted" style="margin-top:6px">💡 <b>Light:</b> ${esc(c.light)}</div>
+      </div>
+
+      <div class="section">
+        <h4>✂️ Trimming &amp; care</h4>
+        <div class="spread" style="align-items:center">
+          <div class="muted">Reminder: ${esc(c.reminder.text)} — every ${c.reminder.every} days<br>Next: ${fmt(nc)} ${statusTag(nc)}</div>
+          <button class="btn secondary small" data-act="check" data-id="${p.id}">✓ Done</button>
+        </div>
+        <details style="margin-top:8px"><summary>Trimming guidance for ${esc(t.label.toLowerCase())} (general guidance)</summary>
+          <ul class="tips">${t.trim.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+      </div>
+      ${p.notes ? `<div class="notes">📝 ${esc(p.notes)}</div>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* ------------------------------ photos (IndexedDB) ------------------------------ */
+const DB_NAME = "overwinter", DB_STORE = "photos";
+let photos = [];             // in-memory copy of all photo records {id, plantId, date, caption, created, w, h, blob}
+let photosReady = false, photosOK = true;
+const urlCache = new Map();  // photo id -> object URL
+let dbPromise = null;
+function openDB(){
+  if(!dbPromise) dbPromise = new Promise((res,rej)=>{
+    if(!("indexedDB" in window)) return rej(new Error("IndexedDB not available"));
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = ()=>{ const d=r.result; if(!d.objectStoreNames.contains(DB_STORE)){ const st=d.createObjectStore(DB_STORE,{keyPath:"id"}); st.createIndex("plantId","plantId"); } };
+    r.onsuccess = ()=>res(r.result); r.onerror = ()=>rej(r.error);
+  });
+  return dbPromise;
+}
+async function idb(mode, work){
+  const d = await openDB();
+  return new Promise((res,rej)=>{
+    const t = d.transaction(DB_STORE, mode), st = t.objectStore(DB_STORE); let out;
+    const r = work(st); if(r && "onsuccess" in r) r.onsuccess = ()=>{ out = r.result; };
+    t.oncomplete = ()=>res(out); t.onerror = ()=>rej(t.error); t.onabort = ()=>rej(t.error || new Error("aborted"));
+  });
+}
+const idbAll   = ()=> idb("readonly", st=>st.getAll());
+const idbPut   = rec=> idb("readwrite", st=>{ st.put(rec); });
+const idbDel   = ids=> idb("readwrite", st=>{ ids.forEach(id=>st.delete(id)); });
+const idbClear = ()=> idb("readwrite", st=>{ st.clear(); });
+async function loadPhotos(){
+  try{ photos = (await idbAll()) || []; }
+  catch(e){ photosOK = false; console.warn("Photos unavailable:", e); }
+  photosReady = true;
+}
+function photosOf(pid){ return photos.filter(ph=>ph.plantId===pid).sort((a,b)=> a.date.localeCompare(b.date) || a.created-b.created); }
+function coverOf(p){ const list = photosOf(p.id); return list.find(ph=>ph.id===p.coverPhotoId) || list[0] || null; }
+function photoURL(ph){ if(!urlCache.has(ph.id)) urlCache.set(ph.id, URL.createObjectURL(ph.blob)); return urlCache.get(ph.id); }
+function dropURL(id){ if(urlCache.has(id)){ URL.revokeObjectURL(urlCache.get(id)); urlCache.delete(id); } }
+let persistAsked = false;
+function askPersist(){ if(persistAsked) return; persistAsked = true; try{ navigator.storage && navigator.storage.persist && navigator.storage.persist().catch(()=>{}); }catch(_){} }
+
+/* resize + compress on the device: max 1200px long edge, JPEG 0.8 */
+const PHOTO_MAX = 1200, PHOTO_QUALITY = 0.8;
+async function decodeImage(file){
+  if(window.createImageBitmap){ try{ return await createImageBitmap(file, {imageOrientation:"from-image"}); }catch(_){} }
+  return new Promise((res,rej)=>{ const u=URL.createObjectURL(file), img=new Image();
+    img.onload=()=>{ URL.revokeObjectURL(u); res(img); }; img.onerror=()=>{ URL.revokeObjectURL(u); rej(new Error("Unsupported image")); }; img.src=u; });
+}
+async function processImage(file){
+  const src = await decodeImage(file);
+  const w0 = src.width || src.naturalWidth, h0 = src.height || src.naturalHeight;
+  const k = Math.min(1, PHOTO_MAX / Math.max(w0,h0)), w = Math.round(w0*k), h = Math.round(h0*k);
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h);
+  ctx.imageSmoothingQuality = "high"; ctx.drawImage(src, 0, 0, w, h);
+  if(src.close) src.close();
+  const blob = await new Promise((res,rej)=> c.toBlob(b=> b?res(b):rej(new Error("Compression failed")), "image/jpeg", PHOTO_QUALITY));
+  return { blob, w, h };
+}
+async function addPhoto(plantId, img, date, caption){
+  const rec = { id: uid(), plantId, date: date || todayISO(), caption: (caption||"").trim(), created: Date.now(), w: img.w, h: img.h, blob: img.blob };
+  await idbPut(rec); photos.push(rec); askPersist(); return rec;
+}
+async function deletePhoto(id){
+  const ph = photos.find(x=>x.id===id); if(!ph) return;
+  await idbDel([id]); photos = photos.filter(x=>x.id!==id); dropURL(id);
+  const p = findPlant(ph.plantId); if(p && p.coverPhotoId===id){ delete p.coverPhotoId; saveState(); }
+}
+async function deletePhotosOf(pid){
+  const ids = photos.filter(x=>x.plantId===pid).map(x=>x.id);
+  if(ids.length){ await idbDel(ids); ids.forEach(dropURL); photos = photos.filter(x=>x.plantId!==pid); }
+}
+
+/* ---- photo dialog (add new, pending first photo, or edit date/caption) ---- */
+let pd = null; // {mode:"add"|"pending"|"edit", plantId, photo, img, onDone}
+function openPhotoDialog(opts){
+  if(!photosOK){ toast("⚠️ Photos need browser storage (IndexedDB), which isn't available here."); return; }
+  pd = Object.assign({ img:null }, opts);
+  const p = opts.plantId ? findPlant(opts.plantId) : null;
+  $("#pdTitle").textContent = opts.mode==="edit" ? "Edit photo details" : (opts.title || "Add a progress photo");
+  $("#pdSub").textContent = opts.mode==="edit" ? "" : (opts.sub || (p ? (photosOf(p.id).length ? `A new snapshot for ${p.name}'s progress journal.` : `This first photo becomes ${p.name}'s cover.`) : ""));
+  $("#pdDate").value = opts.mode==="edit" ? opts.photo.date : (opts.date || todayISO());
+  $("#pdCaption").value = opts.mode==="edit" ? opts.photo.caption : (opts.caption || "");
+  $("#pdPick").hidden = opts.mode==="edit"; $("#pdBusy").hidden = true;
+  $("#pdPreview").hidden = opts.mode!=="edit"; $("#pdChange").hidden = opts.mode==="edit";
+  if(opts.mode==="edit") $("#pdImg").src = photoURL(opts.photo);
+  $("#pdSave").disabled = opts.mode!=="edit";
+  $("#photoDlg").hidden = false;
+}
+function closePhotoDialog(){ $("#photoDlg").hidden = true; if(pd && pd.previewURL) URL.revokeObjectURL(pd.previewURL); pd = null; ["#pdCam","#pdGal"].forEach(s=>$(s).value=""); }
+async function onPhotoPicked(e){
+  const f = e.target.files && e.target.files[0]; e.target.value = ""; if(!f || !pd) return;
+  $("#pdPick").hidden = true; $("#pdBusy").hidden = false; $("#pdPreview").hidden = true;
+  try{
+    pd.img = await processImage(f);
+    if(pd.previewURL) URL.revokeObjectURL(pd.previewURL);
+    pd.previewURL = URL.createObjectURL(pd.img.blob);
+    $("#pdImg").src = pd.previewURL; $("#pdPreview").hidden = false; $("#pdSave").disabled = false;
+  }catch(err){ console.warn(err); toast("⚠️ Couldn't read that image — try a JPEG or PNG."); $("#pdPick").hidden = false; }
+  $("#pdBusy").hidden = true;
+}
+$("#pdCam").addEventListener("change", onPhotoPicked);
+$("#pdGal").addEventListener("change", onPhotoPicked);
+$("#pdChange").addEventListener("click", ()=>{ $("#pdPick").hidden=false; $("#pdPreview").hidden=true; $("#pdSave").disabled=true; if(pd) pd.img=null; });
+$("#pdCancel").addEventListener("click", closePhotoDialog);
+$("#photoDlg").addEventListener("click", e=>{ if(e.target.id==="photoDlg") closePhotoDialog(); });
+$("#pdForm").addEventListener("submit", async e=>{
+  e.preventDefault(); if(!pd) return;
+  const date = $("#pdDate").value || todayISO(), caption = $("#pdCaption").value;
+  const cur = pd; $("#pdSave").disabled = true;
+  try{
+    if(cur.mode==="edit"){
+      cur.photo.date = date; cur.photo.caption = caption.trim(); await idbPut(cur.photo); toast("Photo updated");
+    } else if(cur.mode==="pending"){
+      cur.onDone && cur.onDone({ img: cur.img, date, caption }); cur.previewURL = null; // ownership passes to caller
+    } else {
+      if(!cur.img) return;
+      await addPhoto(cur.plantId, cur.img, date, caption); toast("📸 Photo saved");
+    }
+  }catch(err){ console.warn(err); toast("⚠️ Couldn't save the photo (storage full?)"); }
+  closePhotoDialog(); render(); refreshProgress();
+});
+
+/* ---- "add a first photo" slot used in onboarding + add plant ---- */
+function renderFirstPhotoSlot(el, pending, onChange){
+  if(pending){
+    const u = pending.url || (pending.url = URL.createObjectURL(pending.img.blob));
+    el.innerHTML = `<img src="${u}" alt="First photo preview"><span class="muted">First photo added${pending.caption?` — “${esc(pending.caption)}”`:""}</span>
+      <button type="button" class="btn ghost small" data-fp="change">Change</button><button type="button" class="btn ghost small" data-fp="remove">Remove</button>`;
+  } else {
+    el.innerHTML = `<button type="button" class="btn secondary small" data-fp="add">📷 Add a first photo</button><span class="muted">Optional — it becomes the plant's cover.</span>`;
+  }
+  el.onclick = e=>{
+    const b = e.target.closest("[data-fp]"); if(!b) return;
+    if(b.dataset.fp==="remove"){ if(pending && pending.url) URL.revokeObjectURL(pending.url); onChange(null); return; }
+    openPhotoDialog({ mode:"pending", title:"Add a first photo", sub:"It'll be this plant's cover and the start of its progress journal.",
+      onDone: v=>{ if(pending && pending.url) URL.revokeObjectURL(pending.url); onChange(v); } });
+  };
+}
+
+/* ---- overlays + Android back button ---- */
+const overlayStack = []; let skipPop = 0;
+function pushOverlay(name){ overlayStack.push(name); history.pushState({ow:name}, ""); }
+function popOverlay(name, viaHistory){
+  const i = overlayStack.lastIndexOf(name); if(i<0) return;
+  overlayStack.splice(i,1);
+  if(name==="viewer") $("#viewer").hidden = true;
+  if(name==="progress"){ $("#progress").hidden = true; pg = null; document.body.style.overflow=""; }
+  if(!viaHistory){ skipPop++; history.back(); }
+}
+window.addEventListener("popstate", ()=>{
+  if(skipPop){ skipPop--; return; }
+  if(overlayStack.length) popOverlay(overlayStack[overlayStack.length-1], true);
+});
+
+/* ---- progress timeline ---- */
+let pg = null; // plant id
+function dayLabel(p, iso){ const n = diffDays(iso, p.indoorDate); return n===0 ? "Moving-in day" : n>0 ? `Day ${n} indoors` : `${-n} day${n===-1?"":"s"} before moving in`; }
+function openProgress(pid){
+  pg = pid; refreshProgress(); $("#progress").hidden = false; $("#progress").scrollTop = 0;
+  document.body.style.overflow = "hidden"; pushOverlay("progress");
+}
+function refreshProgress(){
+  if(!pg) return; const p = findPlant(pg); if(!p){ popOverlay("progress"); return; }
+  const t = typeOf(p), list = photosOf(p.id), cov = coverOf(p);
+  $("#pgTitle").textContent = p.name;
+  const span = list.length>1 ? diffDays(list[list.length-1].date, list[0].date) : 0;
+  $("#pgBody").innerHTML = `
+    <div class="hero">${cov?`<img src="${photoURL(cov)}" alt="${esc(p.name)} cover photo">`:`<span class="cover-emoji" aria-hidden="true">${t.emoji}</span>`}
+      <span class="cover-shade"></span><span class="cover-title"><span class="cover-name">${esc(p.name)}</span><span class="cover-sub">${esc(t.label)} · indoors since ${fmt(p.indoorDate)}</span></span></div>
+    <div class="stats">
+      <div class="stat"><b>${Math.max(0,diffDays(todayISO(),p.indoorDate))}</b><span>days indoors</span></div>
+      <div class="stat"><b>${list.length}</b><span>photo${list.length===1?"":"s"}</span></div>
+      <div class="stat"><b>${p.waterHistory.length}</b><span>waterings</span></div>
+      ${list.length>1?`<div class="stat"><b>${span}</b><span>days tracked</span></div>`:""}
+    </div>
+    ${list.length ? `<div class="timeline">${list.map((ph,i)=>`
+      <div class="tl-item" data-photo="${ph.id}">
+        <div class="tl-date"><b>${esc(dayLabel(p, ph.date))}</b>${fmt(ph.date)}</div>
+        <button class="tl-photo" data-view="${i}" aria-label="View photo from ${fmt(ph.date)} full screen"><img src="${photoURL(ph)}" alt="${esc(ph.caption || p.name+" on "+fmt(ph.date))}" loading="lazy" ${ph.w?`width="${ph.w}" height="${ph.h}"`:""}></button>
+        ${ph.caption?`<div class="tl-caption">“${esc(ph.caption)}”</div>`:""}
+        <div class="tl-actions">
+          ${cov && cov.id===ph.id ? `<span class="badge-cover">★ Cover photo</span>` : `<button class="btn ghost small" data-pact="cover" data-pid="${ph.id}">★ Set as cover</button>`}
+          <button class="btn ghost small" data-pact="edit" data-pid="${ph.id}">✏️ Edit</button>
+          <button class="btn ghost small" data-pact="delete" data-pid="${ph.id}">🗑️ Delete</button>
+        </div>
+      </div>`).join("")}</div>`
+    : `<div class="card empty" style="margin-top:20px"><div class="emoji">📷</div><p>No photos yet. Snap one today — your first photo becomes ${esc(p.name)}'s cover, and every photo after builds a timeline you can look back on in spring.</p>
+        <button class="btn" data-pact="add">📷 Add first photo</button></div>`}`;
+}
+$("#pgBack").addEventListener("click", ()=>popOverlay("progress"));
+$("#pgAdd").addEventListener("click", ()=>openPhotoDialog({ mode:"add", plantId: pg }));
+$("#pgBody").addEventListener("click", async e=>{
+  const v = e.target.closest("[data-view]"); if(v){ openViewer(pg, Number(v.dataset.view)); return; }
+  const b = e.target.closest("[data-pact]"); if(!b) return;
+  const p = findPlant(pg), ph = photos.find(x=>x.id===b.dataset.pid);
+  if(b.dataset.pact==="add") return openPhotoDialog({ mode:"add", plantId: pg });
+  if(b.dataset.pact==="cover"){ p.coverPhotoId = ph.id; saveState(); render(); refreshProgress(); toast("★ Cover photo updated"); }
+  if(b.dataset.pact==="edit") openPhotoDialog({ mode:"edit", plantId: pg, photo: ph });
+  if(b.dataset.pact==="delete" && confirm(`Delete this photo from ${fmt(ph.date)}? This can't be undone.`)){
+    await deletePhoto(ph.id); render(); refreshProgress(); toast("Photo deleted");
+  }
+});
+
+/* ---- full-screen viewer with swipe ---- */
+let vw = null; // {pid, i}
+function openViewer(pid, i){ vw = { pid, i }; showViewerPhoto(); $("#viewer").hidden = false; pushOverlay("viewer"); }
+function showViewerPhoto(){
+  const p = findPlant(vw.pid), list = photosOf(vw.pid);
+  if(!list.length){ popOverlay("viewer"); return; }
+  vw.i = Math.max(0, Math.min(vw.i, list.length-1)); const ph = list[vw.i], cov = coverOf(p);
+  $("#vwImg").src = photoURL(ph); $("#vwImg").alt = ph.caption || `${p.name} on ${fmt(ph.date)}`;
+  $("#vwCount").textContent = `${vw.i+1} / ${list.length}`;
+  $("#vwCap").textContent = ph.caption ? `“${ph.caption}”` : "";
+  $("#vwMeta").textContent = `${p.name} · ${fmt(ph.date)} · ${dayLabel(p, ph.date)}`;
+  $("#vwPrev").disabled = vw.i===0; $("#vwNext").disabled = vw.i===list.length-1;
+  const isCov = cov && cov.id===ph.id; $("#vwCover").disabled = isCov; $("#vwCover").textContent = isCov ? "★ Cover" : "☆ Set as cover";
+}
+function viewerStep(d){ if(!vw) return; const n = photosOf(vw.pid).length, j = vw.i + d; if(j<0||j>=n) return; vw.i = j; showViewerPhoto(); }
+$("#vwPrev").addEventListener("click", ()=>viewerStep(-1));
+$("#vwNext").addEventListener("click", ()=>viewerStep(1));
+$("#vwClose").addEventListener("click", ()=>popOverlay("viewer"));
+$("#vwCover").addEventListener("click", ()=>{ const p=findPlant(vw.pid), ph=photosOf(vw.pid)[vw.i]; p.coverPhotoId = ph.id; saveState(); showViewerPhoto(); render(); refreshProgress(); toast("★ Cover photo updated"); });
+$("#vwDelete").addEventListener("click", async ()=>{
+  const ph = photosOf(vw.pid)[vw.i];
+  if(!confirm(`Delete this photo from ${fmt(ph.date)}? This can't be undone.`)) return;
+  await deletePhoto(ph.id); render(); refreshProgress(); toast("Photo deleted");
+  if(photosOf(vw.pid).length) showViewerPhoto(); else popOverlay("viewer");
+});
+(()=>{ // swipe
+  let x0 = null, y0 = 0; const st = $("#vwStage");
+  st.addEventListener("pointerdown", e=>{ if(e.target.closest(".vw-nav")) return; x0 = e.clientX; y0 = e.clientY; });
+  st.addEventListener("pointerup", e=>{ if(x0===null) return; const dx = e.clientX-x0, dy = e.clientY-y0; x0 = null;
+    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) viewerStep(dx<0 ? 1 : -1); });
+  st.addEventListener("pointercancel", ()=>{ x0 = null; });
+  st.addEventListener("dragstart", e=>e.preventDefault());
+})();
+
+/* --------------------------- equipment + cart --------------------------- */
+const CART_KEY = "overwinter.cart.v1";
+const isRealTag  = t => typeof t==="string" && /^[A-Za-z0-9-]{3,}-\d{2}$/.test(t) && !/^YOURTAG/i.test(t);
+const isRealAsin = a => typeof a==="string" && /^[A-Z0-9]{10}$/.test(a);
+const allProducts = () => AFFILIATE_CONFIG.categories.flatMap(c=>c.products);
+let cart = (()=>{ try{ const c=JSON.parse(localStorage.getItem(CART_KEY)); return c && typeof c==="object" ? c : {}; }catch(_){ return {}; } })();
+// drop selections for products no longer in the config
+function saveCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(_){} }
+(()=>{ let changed=false;
+  Object.keys(cart).forEach(id=>{ const q=Number(cart[id]);
+    if(!allProducts().some(p=>p.id===id) || !(q>=1)){ delete cart[id]; changed=true; } });
+  if(changed) saveCart(); })();
+function productLink(p){
+  if(p.url && p.url!=="#") return p.url;
+  const tag = AFFILIATE_CONFIG.AMAZON_ASSOCIATE_TAG;
+  if(isRealAsin(p.asin) && isRealTag(tag)) return `https://www.amazon.com/dp/${p.asin}?tag=${encodeURIComponent(tag)}`;
+  return null;
+}
+/** Builds Amazon's official Add-to-Cart form URL, or null if tag/ASINs are placeholders. */
+function buildCartURL(){
+  const tag = AFFILIATE_CONFIG.AMAZON_ASSOCIATE_TAG;
+  const sel = allProducts().filter(p=>cart[p.id]);
+  if(!sel.length || !isRealTag(tag) || !sel.every(p=>isRealAsin(p.asin))) return null;
+  const parts = [`AssociateTag=${encodeURIComponent(tag)}`];
+  sel.forEach((p,i)=>{ parts.push(`ASIN.${i+1}=${encodeURIComponent(p.asin)}`, `Quantity.${i+1}=${Math.max(1,Math.min(99,cart[p.id]|0))}`); });
+  return "https://www.amazon.com/gp/aws/cart/add.html?" + parts.join("&");
+}
+function renderEquipment(){
+  $("#affDisclosure").textContent = AFFILIATE_CONFIG.disclosure;
+  $("#checkoutNote").textContent = AFFILIATE_CONFIG.checkoutNote;
+  $("#equipList").innerHTML = AFFILIATE_CONFIG.categories.map(c=>`<article class="card equip">
+      <div class="row" style="flex-wrap:nowrap;gap:12px;margin-bottom:8px"><div class="icon" aria-hidden="true">${c.icon}</div><h3>${esc(c.title)}</h3></div>
+      <p>${esc(c.description)}</p>
+      <ul>${(c.tips||[]).map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+      ${c.note?`<p class="origin-note">${esc(c.note)}</p>`:""}
+      <div class="products">${c.products.map(p=>{
+        const on = !!cart[p.id], link = productLink(p);
+        const view = link
+          ? `<a class="btn ghost small" href="${esc(link)}" target="_blank" rel="sponsored noopener" data-affiliate="set">View ↗</a>`
+          : `<a class="btn ghost small" href="#" data-affiliate="TODO" data-item="${esc(p.id)}" title="Affiliate link not set yet">View</a>`;
+        return `<div class="product${on?" on":""}" data-pid="${esc(p.id)}">
+          <div class="pemoji" aria-hidden="true">${p.emoji||c.icon}</div>
+          <div class="pbody"><b>${esc(p.name)}</b>${p.usa===true?` <span class="usa" title="Made in USA">🇺🇸 Made in USA</span>`:p.usa===false?` <span class="notusa">Not made in USA</span>`:""}<div class="muted">${esc(p.description)}</div>
+            <div class="row pctl">
+              <label class="toggle"><input type="checkbox" data-cart="toggle" data-pid="${esc(p.id)}" ${on?"checked":""}> ${on?"Added to list":"Add to list"}</label>
+              <label class="qty">Qty <select data-cart="qty" data-pid="${esc(p.id)}" aria-label="Quantity for ${esc(p.name)}">${[1,2,3,4,5,6,8,10].map(n=>`<option ${ (cart[p.id]||1)==n?"selected":""}>${n}</option>`).join("")}</select></label>
+              ${view}
+            </div></div></div>`;
+      }).join("")}</div>
+    </article>`).join("");
+  renderCartBar();
+}
+function renderCartBar(){
+  const sel = allProducts().filter(p=>cart[p.id]);
+  const units = sel.reduce((n,p)=>n+(cart[p.id]|0),0);
+  const bar = $("#cartBar"), url = buildCartURL();
+  bar.classList.toggle("empty", !sel.length);
+  const label = sel.length ? `<b>${sel.length} item${sel.length>1?"s":""} selected</b>${units!==sel.length?` <span class="muted">(${units} units)</span>`:""}` : `<span class="muted">Tick “Add to list” on items you want</span>`;
+  let action;
+  if(!sel.length) action = `<button class="btn" disabled id="cartBtn">🛒 Add all to Amazon cart</button>`;
+  else if(url) action = `<a class="btn" id="cartBtn" href="${esc(url)}" target="_blank" rel="sponsored noopener">🛒 Add all to Amazon cart</a>`;
+  else action = `<button class="btn" disabled id="cartBtn" title="Set AMAZON_ASSOCIATE_TAG and product ASINs in AFFILIATE_CONFIG">Add your Amazon tag &amp; product ASINs to enable</button>`;
+  bar.innerHTML = `<div>${label}</div><div class="row">${sel.length?`<button class="btn ghost small" id="cartClear">Clear</button>`:""}${action}</div>`;
+}
+document.addEventListener("change", e=>{
+  const el = e.target.closest("[data-cart]"); if(!el) return;
+  const id = el.dataset.pid;
+  if(el.dataset.cart==="toggle"){
+    if(el.checked){ const q = document.querySelector(`select[data-cart=qty][data-pid="${id}"]`); cart[id] = Number(q?q.value:1)||1; }
+    else delete cart[id];
+  } else if(el.dataset.cart==="qty"){
+    cart[id] = Number(el.value)||1; // choosing a quantity also adds the item to the list
+  }
+  saveCart(); renderEquipment();
+});
+document.addEventListener("click", e=>{ if(e.target.closest("#cartClear")){ cart={}; saveCart(); renderEquipment(); toast("Selection cleared"); } });
+
+function render(){ renderDue(); renderPlants(); }
+
+/* ------------------------------ navigation ------------------------------ */
+function showView(name){
+  document.querySelectorAll("nav [role=tab]").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.view===name)));
+  $("#view-plants").hidden = name!=="plants";
+  $("#view-equipment").hidden = name!=="equipment";
+  if(location.hash !== "#"+name) history.replaceState(null,"","#"+name);
+}
+document.querySelectorAll("nav [role=tab]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+
+/* ------------------------------- actions -------------------------------- */
+document.addEventListener("click", e=>{
+  const aff = e.target.closest('a[data-affiliate="TODO"]');
+  if(aff){ e.preventDefault(); toast("Shop link coming soon!"); return; }
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const p = b.dataset.id ? findPlant(b.dataset.id) : null;
+  switch(b.dataset.act){
+    case "water": {
+      const t = todayISO();
+      if(lastWatered(p)===t){ toast(`${p.name} was already watered today`); return; }
+      p.waterHistory.push(t); p.waterHistory = p.waterHistory.slice(-50);
+      saveState(); render(); toast(`💧 ${p.name} watered — next ${fmt(nextWater(p))}`); break;
+    }
+    case "undo": p.waterHistory.pop(); saveState(); render(); toast("Last watering removed"); break;
+    case "check": p.lastCheck = todayISO(); saveState(); render(); toast(`✂️ Noted — next check ${fmt(nextCheck(p))}`); break;
+    case "edit": openEditor(p); break;
+    case "addphoto": openPhotoDialog({ mode:"add", plantId: p.id }); break;
+    case "togglelocpick": locPickOpen = locPickOpen===p.id ? null : p.id; render(); break;
+    case "setloc": {
+      const loc = b.dataset.loc==="cool" ? "cool" : "room";
+      if(locOf(p)===loc){ locPickOpen = null; render(); break; }
+      p.location = loc; locPickOpen = null;
+      const def = careOf(p).interval;
+      if(p.intervalDays !== def) intervalSuggest[p.id] = def; else delete intervalSuggest[p.id];
+      saveState(); render(); toast(`${LOCATIONS[loc].icon} ${p.name} is now in ${loc==="room"?"room temperature":"a cool spot"}`); break;
+    }
+    case "usesuggest": p.intervalDays = intervalSuggest[p.id] || careOf(p).interval; delete intervalSuggest[p.id]; saveState(); render(); toast(`💧 Watering every ${p.intervalDays} days`); break;
+    case "keepsuggest": delete intervalSuggest[p.id]; render(); break;
+    case "openroomtips": e.preventDefault(); { const d = $("#roomTips"); d.open = true; d.scrollIntoView({behavior:"smooth", block:"start"}); } break;
+    case "progress": openProgress(p.id); break;
+    case "remove": {
+      const n = photosOf(p.id).length;
+      if(confirm(`Remove "${p.name}"? Its watering history${n?` and ${n} photo${n>1?"s":""}`:""} will be deleted.`)){
+        deletePhotosOf(p.id).catch(err=>console.warn(err)).finally(()=>{
+          state.plants = state.plants.filter(x=>x.id!==p.id); saveState(); render(); toast("Plant removed"); });
+      } break;
+    }
+    case "onboard": openOnboarding(); break;
+  }
+});
+
+/* ------------------------------ onboarding ------------------------------ */
+let obSelected = [], obPending = {};
+let locPickOpen = null;            // plant id whose "Change spot" picker is open
+const intervalSuggest = {};        // plant id -> suggested interval after a location change
+
+/* ---- "Where is it kept?" picker used in onboarding + add/edit ---- */
+function locPickerHTML(name, type, loc){
+  const t = PLANT_TYPES[type] || PLANT_TYPES.custom;
+  return `<fieldset class="locpick"><legend>Where is it kept?</legend>
+    ${["room","cool"].map(k=>{ const L = LOCATIONS[k], w = k==="cool" && t.warmLover;
+      return `<label class="locopt"><input type="radio" name="${name}" value="${k}" ${loc===k?"checked":""}>
+        <span><b>${L.icon} ${L.label} <span class="places">(${L.places})</span></b>
+        <small>${k==="room" ? `~${L.temp} · often dry indoor air · plants stay active` : `Ideal for ${esc(t.label.toLowerCase())}: ${esc(t.ideal)} · ${w?"⚠️ not recommended for this plant":"semi-dormant, much less water"}`}</small></span></label>`; }).join("")}
+    <div class="warnbox" data-locwarn hidden></div>
+  </fieldset>`;
+}
+/* wires a picker + interval input: untouched intervals follow the default; custom ones get a suggestion */
+function wireLocInterval(root, getType, intervalEl, hintEl){
+  const cur = ()=>{ const r = root.querySelector('.locpick input:checked'); return r ? r.value : DEFAULT_LOCATION; };
+  const update = (fromChange)=>{
+    const type = getType(), loc = cur(), c = careFor(type, loc);
+    if(fromChange && !intervalEl.dataset.touched) intervalEl.value = c.interval;
+    const custom = Number(intervalEl.value) !== c.interval;
+    hintEl.innerHTML = `Default ${loc==="room"?"at room temp":"in a cool spot"}: ${esc(c.range)}` +
+      (custom ? ` · <a href="#" data-usedef="${c.interval}">Use suggested ${c.interval} days</a>` : "");
+    const w = root.querySelector("[data-locwarn]"); if(w){ w.hidden = !c.warning; w.textContent = c.warning ? "⚠️ "+c.warning : ""; }
+  };
+  root.querySelectorAll(".locpick input").forEach(r=>r.addEventListener("change", ()=>update(true)));
+  intervalEl.addEventListener("input", ()=>{ intervalEl.dataset.touched = "1"; update(false); });
+  hintEl.onclick = e=>{ const a = e.target.closest("[data-usedef]"); if(!a) return; e.preventDefault(); intervalEl.value = a.dataset.usedef; delete intervalEl.dataset.touched; update(false); };
+  update(false);
+  return { loc: cur, update };
+}
+function openOnboarding(){
+  obSelected = [];
+  $("#obPicker").innerHTML = Object.entries(PLANT_TYPES).map(([k,t])=>
+    `<button type="button" class="pick" data-type="${k}" aria-pressed="false"><span class="emoji">${t.emoji}</span><b>${esc(t.label)}</b><small>${esc(t.summary)}</small></button>`).join("");
+  $("#obStep1").hidden=false; $("#obStep2").hidden=true; $("#obNext").disabled=true;
+  $("#onboard").hidden=false;
+}
+$("#obPicker").addEventListener("click", e=>{
+  const b=e.target.closest(".pick"); if(!b) return;
+  const on = b.getAttribute("aria-pressed")!=="true";
+  b.setAttribute("aria-pressed", String(on));
+  const k=b.dataset.type;
+  obSelected = on ? [...obSelected,k] : obSelected.filter(x=>x!==k);
+  $("#obNext").disabled = !obSelected.length;
+});
+$("#obNext").addEventListener("click", ()=>{
+  const today=todayISO();
+  $("#obPlants").innerHTML = obSelected.map((k,i)=>{ const t=PLANT_TYPES[k]; return `
+    <div class="ob-plant" data-type="${k}">
+      <h3>${t.emoji} ${esc(t.label)}</h3>
+      <label for="ob-name-${i}">Name / nickname</label>
+      <input id="ob-name-${i}" name="name" required maxlength="60" value="${k==="custom"?"":esc(t.label.replace(/ \(.*\)/,""))}" placeholder="${k==="custom"?"e.g. Ginger, Geranium, Sweet potato":""}">
+      ${locPickerHTML("ob-loc-"+i, k, DEFAULT_LOCATION)}
+      <div class="two">
+        <div><label for="ob-date-${i}">Date brought indoors</label><input type="date" id="ob-date-${i}" name="date" required value="${today}" max="${addDays(today,60)}"></div>
+        <div><label for="ob-int-${i}">Water every (days)</label><input type="number" id="ob-int-${i}" name="interval" min="1" max="120" required value="${careFor(k,DEFAULT_LOCATION).interval}"><div class="hint" data-hint></div></div>
+      </div>
+      <label for="ob-notes-${i}">Notes (optional)</label>
+      <textarea id="ob-notes-${i}" name="notes" maxlength="1000" placeholder="Variety, where it's kept…"></textarea>
+      <div class="firstphoto" data-fpi="${i}"></div>
+    </div>`;}).join("");
+  obPending = {};
+  document.querySelectorAll("#obPlants .ob-plant").forEach(div=>
+    wireLocInterval(div, ()=>div.dataset.type, div.querySelector('[name=interval]'), div.querySelector('[data-hint]')));
+  document.querySelectorAll("#obPlants [data-fpi]").forEach(el=>{
+    const i = el.dataset.fpi, draw = ()=>renderFirstPhotoSlot(el, obPending[i], v=>{ obPending[i]=v; draw(); }); draw(); });
+  $("#obStep1").hidden=true; $("#obStep2").hidden=false;
+  const first = $("#obPlants input"); if(first) first.focus();
+});
+$("#obBack").addEventListener("click", ()=>{ $("#obStep1").hidden=false; $("#obStep2").hidden=true; });
+$("#obForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const jobs = [];
+  document.querySelectorAll("#obPlants .ob-plant").forEach((div,i)=>{
+    const pl = makePlant({ type: div.dataset.type,
+      name: div.querySelector('[name=name]').value || PLANT_TYPES[div.dataset.type].label,
+      indoorDate: div.querySelector('[name=date]').value || todayISO(),
+      intervalDays: div.querySelector('[name=interval]').value,
+      location: (div.querySelector('.locpick input:checked')||{}).value,
+      notes: div.querySelector('[name=notes]').value });
+    state.plants.push(pl);
+    const fp = obPending[i];
+    if(fp) jobs.push(addPhoto(pl.id, fp.img, fp.date, fp.caption).finally(()=>fp.url && URL.revokeObjectURL(fp.url)));
+  });
+  state.onboarded = true; saveState();
+  try{ await Promise.all(jobs); }catch(err){ console.warn(err); toast("⚠️ A photo couldn't be saved"); }
+  obPending = {};
+  $("#onboard").hidden=true; render(); showView("plants");
+  toast(`🌱 Saved ${obSelected.length} plant${obSelected.length>1?"s":""}!`);
+});
+
+/* ---------------------------- add / edit plant -------------------------- */
+let editingId = null, edPending = null;
+function drawEdPhoto(){ renderFirstPhotoSlot($("#edFirstPhoto"), edPending, v=>{ edPending=v; drawEdPhoto(); }); }
+$("#edType").innerHTML = Object.entries(PLANT_TYPES).map(([k,t])=>`<option value="${k}">${t.emoji} ${esc(t.label)}</option>`).join("");
+let edLoc = null;
+function drawEdLoc(loc){
+  $("#edLoc").innerHTML = locPickerHTML("ed-loc", $("#edType").value, loc);
+  edLoc = wireLocInterval($("#editor"), ()=>$("#edType").value, $("#edInterval"), $("#edIntervalHint"));
+}
+$("#edType").addEventListener("change", ()=>{
+  const loc = edLoc ? edLoc.loc() : DEFAULT_LOCATION;
+  if(!$("#edInterval").dataset.touched) $("#edInterval").value = careFor($("#edType").value, loc).interval;
+  drawEdLoc(loc);
+});
+function openEditor(p){
+  editingId = p ? p.id : null;
+  $("#edTitle").textContent = p ? `Edit ${p.name}` : "Add a plant";
+  $("#edType").value = p ? (PLANT_TYPES[p.type]?p.type:"custom") : "pepper";
+  $("#edName").value = p ? p.name : "";
+  $("#edDate").value = p ? p.indoorDate : todayISO();
+  const loc0 = p ? locOf(p) : DEFAULT_LOCATION;
+  $("#edInterval").value = p ? p.intervalDays : careFor("pepper", loc0).interval;
+  if(p && p.intervalDays !== careOf(p).interval) $("#edInterval").dataset.touched = "1"; else delete $("#edInterval").dataset.touched;
+  $("#edNotes").value = p ? p.notes : "";
+  drawEdLoc(loc0);
+  if(edPending && edPending.url) URL.revokeObjectURL(edPending.url);
+  edPending = null; $("#edFirstPhoto").hidden = !!p; if(!p) drawEdPhoto();
+  $("#editor").hidden = false; $("#edName").focus();
+}
+$("#addPlantBtn").addEventListener("click", ()=> state.plants.length ? openEditor(null) : openOnboarding());
+$("#edCancel").addEventListener("click", ()=>{ $("#editor").hidden=true; });
+$("#edForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const data = { type: $("#edType").value, name: $("#edName").value, indoorDate: $("#edDate").value,
+                 intervalDays: $("#edInterval").value, notes: $("#edNotes").value, location: edLoc ? edLoc.loc() : DEFAULT_LOCATION };
+  if(editingId){
+    const p = findPlant(editingId);
+    Object.assign(p, { type:data.type, name:data.name.trim(), indoorDate:data.indoorDate, location: data.location==="cool"?"cool":"room",
+      intervalDays: Math.max(1, Number(data.intervalDays)||careFor(data.type, data.location).interval), notes:data.notes.trim() });
+    delete intervalSuggest[p.id];
+    toast("Plant updated");
+  } else {
+    const pl = makePlant(data); state.plants.push(pl); saveState();
+    if(edPending){ const fp = edPending; edPending = null;
+      try{ await addPhoto(pl.id, fp.img, fp.date, fp.caption); }catch(err){ console.warn(err); toast("⚠️ The photo couldn't be saved"); }
+      if(fp.url) URL.revokeObjectURL(fp.url); }
+    toast(`🌱 ${data.name.trim()} added`);
+  }
+  saveState(); $("#editor").hidden=true; render();
+});
+document.addEventListener("keydown", e=>{
+  if(!$("#viewer").hidden){ if(e.key==="ArrowLeft") return viewerStep(-1); if(e.key==="ArrowRight") return viewerStep(1); }
+  if(e.key==="Escape"){
+    if(!$("#photoDlg").hidden) closePhotoDialog();
+    else if(!$("#viewer").hidden) popOverlay("viewer");
+    else if(!$("#editor").hidden) $("#editor").hidden=true;
+    else if(!$("#progress").hidden) popOverlay("progress");
+    else if(!$("#onboard").hidden && state.plants.length) $("#onboard").hidden=true; }
+});
+$("#editor").addEventListener("click", e=>{ if(e.target.id==="editor") $("#editor").hidden=true; });
+
+/* ---------------------------- backup / restore -------------------------- */
+const blobToDataURL = b => new Promise((res,rej)=>{ const r = new FileReader(); r.onload=()=>res(r.result); r.onerror=()=>rej(r.error); r.readAsDataURL(b); });
+function dataURLToBlob(u){
+  const [head, b64] = u.split(","); const mime = (head.match(/data:([^;]+)/)||[])[1] || "image/jpeg";
+  const bin = atob(b64), arr = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+const mb = n => (n/1048576).toFixed(n>10485760?0:1);
+$("#exportBtn").addEventListener("click", async ()=>{
+  if(photos.length){
+    const est = photos.reduce((n,ph)=>n+ph.blob.size,0) * 1.37;
+    if(!confirm(`Your backup includes ${photos.length} photo${photos.length>1?"s":""}, so it will be about ${mb(est)} MB. Backups with photos can be large — continue?`)) return;
+  }
+  try{
+    const out = { app: "overwinter", version: 2, exported: new Date().toISOString(), ...state, cart,
+      photos: await Promise.all(photos.map(async ph=>({ id: ph.id, plantId: ph.plantId, date: ph.date, caption: ph.caption, created: ph.created, w: ph.w, h: ph.h, data: await blobToDataURL(ph.blob) }))) };
+    const blob = new Blob([JSON.stringify(out)], { type: "application/json" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = `overwinter-backup-${todayISO()}.json`; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+    toast(`⬇ Backup saved${photos.length?` (${photos.length} photos)`:""}`);
+  }catch(err){ console.warn(err); toast("⚠️ Couldn't create the backup"); }
+});
+$("#importBtn").addEventListener("click", ()=> $("#importFile").click());
+$("#importFile").addEventListener("change", async e=>{
+  const f = e.target.files[0]; e.target.value = ""; if(!f) return;
+  let s;
+  try{ s = JSON.parse(await f.text()); if(!s || !Array.isArray(s.plants)) throw 0; }
+  catch(_){ toast("⚠️ That file isn't a valid Overwinter backup"); return; }
+  const np = Array.isArray(s.photos) ? s.photos.length : 0;
+  if(!confirm(`Replace your current plants${photos.length?" and photos":""} with ${s.plants.length} plant(s)${np?` and ${np} photo(s)`:""} from the backup?`)) return;
+  try{
+    const ids = new Set(s.plants.map(p=>p.id));
+    if(Array.isArray(s.photos)){
+      const recs = s.photos.filter(ph=>ph && ph.data && ids.has(ph.plantId)).map(ph=>({ id: ph.id || uid(), plantId: ph.plantId, date: ph.date || todayISO(),
+        caption: ph.caption || "", created: ph.created || Date.now(), w: ph.w, h: ph.h, blob: dataURLToBlob(ph.data) }));
+      await idbClear(); for(const r of recs) await idbPut(r);
+      urlCache.forEach(u=>URL.revokeObjectURL(u)); urlCache.clear(); photos = recs;
+    } else {
+      // older backup without photos: keep existing photos only for plants that still exist
+      const gone = photos.filter(ph=>!ids.has(ph.plantId)).map(ph=>ph.id);
+      if(gone.length){ await idbDel(gone); gone.forEach(dropURL); photos = photos.filter(ph=>ids.has(ph.plantId)); }
+    }
+    state = { plants: s.plants.map(normalizePlant), onboarded: true }; saveState();
+    if(s.cart && typeof s.cart==="object"){ cart = s.cart; saveCart(); renderEquipment(); }
+    $("#onboard").hidden = true; render(); toast(`Backup restored${np?` (${np} photos)`:""}`);
+  }catch(err){ console.warn(err); toast("⚠️ Import failed — your browser storage may be full."); }
+});
+
+/* --------------------------------- init --------------------------------- */
+renderEquipment(); render();
+showView(location.hash === "#equipment" ? "equipment" : "plants");
+if(!state.plants.length) openOnboarding();
+loadPhotos().then(render);
+</script>
+</body>
+</html>
