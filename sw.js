@@ -5,7 +5,7 @@
    - Reminders: Periodic Background Sync (installed app on Chrome Android) + a "check" message from the page.
      Shows at most one "due" notification per day per list, after the user's chosen reminder time:
      overwintering plants ("💧 N plants need attention") and houseplants ("🪴 Water your Pothos") are separate notifications. */
-const VERSION = "2026-10-24.8";
+const VERSION = "2026-10-25.1";
 const CACHE = "overwinter-" + VERSION;
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
